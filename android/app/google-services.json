@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "551940229513",
+    "firebase_url": "https://asad-dcd96.firebaseio.com",
+    "project_id": "asad-dcd96",
+    "storage_bucket": "asad-dcd96.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:551940229513:android:91e2d8f75925be9e073958",
+        "android_client_info": {
+          "package_name": "co.abdulaziz.omar.chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "551940229513-v5ut27h4v8u59htsemhgttstaj2kkvhf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNqnSimP5Qp2qRJRyNOlv35G7DULJweeM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "551940229513-v5ut27h4v8u59htsemhgttstaj2kkvhf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
