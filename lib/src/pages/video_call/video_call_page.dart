@@ -48,9 +48,15 @@ class VideoCallPageState extends State<VideoCallPage> {
     //   return AgoraRenderWidget(userId);
     // else
     return Center(
-      child: Icon(
-        Icons.people_sharp,
-        size: 100,
+      child: CircleAvatar(
+        maxRadius: 150,
+        backgroundColor: Colors.blueGrey,
+        foregroundColor: Colors.blueGrey,
+        child: Icon(
+          Icons.call,
+          color: Colors.white,
+          size: 100,
+        ),
       ),
     );
   }
@@ -63,31 +69,20 @@ class VideoCallPageState extends State<VideoCallPage> {
         child: SafeArea(
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-          Container(
-              width: MediaQuery.of(context).size.width / 4,
-              height: MediaQuery.of(context).size.height / 4,
-              margin: EdgeInsets.only(bottom: 20),
-              child: AgoraRenderWidget(0, local: true, preview: true)),
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             RawIconButton(
                 padding: EdgeInsets.all(12),
                 icon: Icon(muted ? Icons.mic_off : Icons.mic,
-                    color: blackColor, size: 20),
+                    color: blackColor, size: 30),
                 shape: CircleBorder(),
                 fillColor: Colors.white,
                 onPressed: _onToggleMute),
             RawIconButton(
                 padding: EdgeInsets.all(15),
-                icon: Icon(Icons.call_end, color: whiteColor, size: 35),
+                icon: Icon(Icons.call_end, color: whiteColor, size: 30),
                 shape: CircleBorder(),
                 fillColor: Colors.red,
                 onPressed: () => Navigator.pop(context)),
-            RawIconButton(
-                padding: EdgeInsets.all(12),
-                icon: Icon(Icons.switch_camera, color: blackColor, size: 20),
-                shape: CircleBorder(),
-                fillColor: Colors.white,
-                onPressed: _onSwitchCamera)
           ])
         ])));
   }

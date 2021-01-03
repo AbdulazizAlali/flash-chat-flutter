@@ -163,22 +163,11 @@ class ChatPageState extends State<ChatPage> {
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                   color: blackColor)))),
-                  ((messages.length > 0) && (members.length <= 5))
-                      ? RawIconButton(
-                          height: AppBar().preferredSize.height,
-                          padding: EdgeInsets.symmetric(horizontal: 7.5),
-                          icon: Icon(Icons.person_add,
-                              color: blackColor, size: 25),
-                          onPressed: _addUserPressed)
-                      : Container(),
-                  true
-                      ? RawIconButton(
-                          height: AppBar().preferredSize.height,
-                          padding: EdgeInsets.symmetric(horizontal: 7.5),
-                          icon: Icon(Icons.video_call,
-                              color: blackColor, size: 33),
-                          onPressed: _videoCallPressed)
-                      : Container()
+                  RawIconButton(
+                      height: AppBar().preferredSize.height,
+                      padding: EdgeInsets.symmetric(horizontal: 7.5),
+                      icon: Icon(Icons.call, color: blackColor, size: 30),
+                      onPressed: _videoCallPressed)
                 ])),
             bottom: PreferredSize(
                 child: Container(color: lightGreyColor, height: 0.5),
@@ -303,7 +292,11 @@ String getTime(Timestamp timestamp) {
     return num;
   }
 
-  String time = "${formatnum(date.hour)}:${formatnum(date.minute)}";
-
+  String time;
+  if (date.hour > 12) {
+    time = "${formatnum(date.hour - 12)}:${formatnum(date.minute)} pm";
+  } else {
+    time = "${formatnum(date.hour)}:${formatnum(date.minute)} am";
+  }
   return time;
 }
