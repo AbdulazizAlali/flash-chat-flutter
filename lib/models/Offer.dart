@@ -14,6 +14,7 @@ class Offer {
       {@required this.title,
       @required this.description,
       @required this.price,
+      @required this.userId,
       @required this.type,
       @required this.bids});
 }

@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 part 'offers_event.dart';
 part 'offers_state.dart';
 
-class OffersBloc extends Bloc<NewOfferEvent, NewOfferState> {
+class NewOfferBloc extends Bloc<NewOfferEvent, NewOfferState> {
   AuthService _authService = AuthService();
   String _email;
   String _password;

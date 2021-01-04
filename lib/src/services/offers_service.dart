@@ -13,13 +13,26 @@ Future<List<Offer>> getOffers() {
 List<Offer> getOfferFromDocument(List<DocumentSnapshot> documents) {
   List<Offer> offers = [];
   print(documents.length);
-  documents.map((newOffer) {
+  for (int i = 0; i < documents.length; i++) {
+    var newOffer = documents[i];
     offers.add(Offer(
         title: newOffer.data["title"],
-        description: newOffer.data["title"],
+        description: newOffer.data["description"],
         type: newOffer.data["type"],
+        userId: newOffer.data["userId"],
         price: newOffer.data["price"],
         bids: newOffer.data["bids"]));
-  });
+  }
+  print(offers.toString());
+
   return offers;
 }
+
+// Future<String> getUserImageById(String userId) async {
+//   Firestore _firestore = Firestore.instance;
+//   FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
+//
+//   DocumentSnapshot profileDoc =
+//       await _firestore.collection('users').document(userId).get();
+//   return profileDoc.("imageUrl");
+// }

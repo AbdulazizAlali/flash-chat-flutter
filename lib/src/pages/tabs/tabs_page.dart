@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_chat/src/pages/chats/chats.dart';
 import 'package:flutter_firebase_chat/src/pages/new_offer/offers_page.dart';
+import 'package:flutter_firebase_chat/src/pages/offers/offers_bloc.dart';
 import 'package:flutter_firebase_chat/src/pages/offers/offers_page.dart';
 import 'package:flutter_firebase_chat/src/pages/profile/profile.dart';
 import 'package:flutter_firebase_chat/src/themes/colors.dart';
@@ -25,8 +26,8 @@ class TabsPageState extends State<TabsPage> {
                     create: (_) => ProfileBloc(), child: ProfilePage()),
                 BlocProvider<ProfileBloc>(
                     create: (_) => ProfileBloc(), child: NewOfferPage()),
-                BlocProvider<ProfileBloc>(
-                    create: (_) => ProfileBloc(), child: OffersPage())
+                BlocProvider<OffersBloc>(
+                    create: (_) => OffersBloc(), child: OffersPage())
               ]),
               bottomNavigationBar: SafeArea(
                   child: Container(
