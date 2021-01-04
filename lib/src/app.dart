@@ -21,6 +21,28 @@ class App extends StatelessWidget {
           else if (state is AuthAuthenticatedState)
             homeWidget = TabsPage();
           else homeWidget = Scaffold();
+          FirebaseDatabase _firebaseDatabase = FirebaseDatabase.instance;
+
+          String me =
+              await _authService.getProfile().then((value) => value.username);
+          bool first = true;
+          _authService.getCurrentUserId().then((value) async => _firebaseDatabase
+              .reference()
+              .child(me)
+              .child("calls")
+              .onValue
+              .listen((event) {
+            if (first) {
+              first = false;
+            } else {
+              await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => BlocProvider<VideoCallBloc>(
+                          create: (_) => VideoCallBloc(chatId: me),
+                          child: VideoCallPage())));
+            }
+          }));
           return GestureDetector(
             onTap: () => FocusManager.instance.primaryFocus.unfocus(),
             child: MaterialApp(

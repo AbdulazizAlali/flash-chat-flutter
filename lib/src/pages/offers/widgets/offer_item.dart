@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/models/Offer.dart';
+import 'package:flutter_firebase_chat/src/utils/confirm_alert.dart';
 
 class OfferItem extends StatelessWidget {
   OfferItem(this.offer);
@@ -34,9 +35,13 @@ class OfferItem extends StatelessWidget {
             child: FlatButton(
               splashColor: Colors.transparent,
               focusColor: Colors.blueGrey,
-              onPressed: () {},
+              onPressed: () {
+                ConfirmAlert(context: context, title: "null", onConfirm: () {});
+              },
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 8,
+                ),
                 child: Row(
                   children: [
                     Expanded(

@@ -1,7 +1,8 @@
 import 'dart:async';
-import 'package:meta/meta.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_chat/src/services/video_call_service.dart';
+import 'package:meta/meta.dart';
 
 part 'video_call_event.dart';
 part 'video_call_state.dart';
@@ -15,9 +16,7 @@ class VideoCallBloc extends Bloc<VideoCallEvent, VideoCallState> {
   bool _muted = false;
   int _userId;
 
-  VideoCallBloc({
-    @required this.chatId
-  });
+  VideoCallBloc({@required this.chatId});
 
   @override
   Future<void> close() async {
@@ -47,39 +46,29 @@ class VideoCallBloc extends Bloc<VideoCallEvent, VideoCallState> {
   Stream<VideoCallState> _mapInitToState() async* {
     try {
       await _videoCallService.init(chatId);
-      _onUserJoinedSubscription = _videoCallService
-        .onUserJoined
-        .listen((userId) {
-          add(VideoCallUserJoinedEvent(
-            userId: userId
-          ));
-        });
-      _onUserOfflineSubscription = _videoCallService
-        .onUserOffline
-        .listen((userId) {
-          add(VideoCallUserOfflineEvent(
-            userId: userId
-          ));
-        });
+      _onUserJoinedSubscription =
+          _videoCallService.onUserJoined.listen((userId) {
+        add(VideoCallUserJoinedEvent(userId: userId));
+      });
+      _onUserOfflineSubscription =
+          _videoCallService.onUserOffline.listen((userId) {
+        add(VideoCallUserOfflineEvent(userId: userId));
+      });
     } catch (e) {
       print(e);
     }
   }
 
   Stream<VideoCallState> _mapUserJoinedToState(
-    VideoCallUserJoinedEvent event
-  ) async* {
+      VideoCallUserJoinedEvent event) async* {
     if (_userId == null) {
       _userId = event.userId;
-      yield state.update(
-        userId: _userId
-      );
+      yield state.update(userId: _userId);
     }
   }
 
   Stream<VideoCallState> _mapUserOfflineToState(
-    VideoCallUserOfflineEvent event
-  ) async* {
+      VideoCallUserOfflineEvent event) async* {
     if (_userId == event.userId) {
       _userId = null;
       yield VideoCallState.initial();
@@ -90,9 +79,7 @@ class VideoCallBloc extends Bloc<VideoCallEvent, VideoCallState> {
     try {
       _muted = !_muted;
       await _videoCallService.muteAudio(_muted);
-      yield state.update(
-        muted: _muted
-      );
+      yield state.update(muted: _muted);
     } catch (e) {
       print(e);
     }

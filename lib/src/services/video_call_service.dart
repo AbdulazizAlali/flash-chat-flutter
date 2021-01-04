@@ -12,15 +12,17 @@ class VideoCallService {
 
   AuthService _authService = AuthService();
 
-  Future<bool> init(String chatId) async {
+  Future<bool> init(String channelId) async {
     // await AgoraRtcEngine.enableVideo();
+
     _addAgoraEventHandlers();
     await AgoraRtcEngine.enableWebSdkInteroperability(true);
     await AgoraRtcEngine.setParameters(
         '''{\"che.video.lowBitRateStreamParameter\":{\"width\":320,\"height\":180,\"frameRate\":15,\"bitRate\":140}}''');
+    String me = await _authService.getProfile().then((value) => value.username);
     return AgoraRtcEngine.joinChannelByUserAccount({
       'userAccount': await _authService.getCurrentUserId(),
-      'channelId': chatId
+      'channelId': me,
     });
   }
 

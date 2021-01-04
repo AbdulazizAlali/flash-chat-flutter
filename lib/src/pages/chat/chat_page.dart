@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_chat/src/pages/add_user/add_user.dart';
 import 'package:flutter_firebase_chat/src/pages/chat/chat_bloc.dart';
 import 'package:flutter_firebase_chat/src/pages/chat/widgets/message_bubble.dart';
 import 'package:flutter_firebase_chat/src/pages/video_call/video_call.dart';
+import 'package:flutter_firebase_chat/src/services/auth_service.dart';
 import 'package:flutter_firebase_chat/src/themes/colors.dart';
 import 'package:flutter_firebase_chat/src/utils/loading.dart';
 import 'package:flutter_firebase_chat/src/widgets/raw_icon_button.dart';
@@ -78,13 +80,29 @@ class ChatPageState extends State<ChatPage> {
   }
 
   void _videoCallPressed() async {
+    AuthService _auth = AuthService();
+    String me = await _auth.getProfile().then((value) => value.username);
+
+    String user;
+
+    _chatBloc.members.forEach((key, value) {
+      print(value);
+      if (value["username"] != "me") {
+        user = value["username"];
+      }
+    });
+    FirebaseDatabase _firebaseDatabase = FirebaseDatabase.instance;
+    _firebaseDatabase.reference().child(user).child("calls").set({
+      "time": DateTime.now().toString(),
+      "user": me,
+    });
     await PermissionHandler().requestPermissions(
         [PermissionGroup.camera, PermissionGroup.microphone]);
     await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (_) => BlocProvider<VideoCallBloc>(
-                create: (_) => VideoCallBloc(chatId: _chatBloc.chatId),
+                create: (_) => VideoCallBloc(chatId: me),
                 child: VideoCallPage())));
   }
 
@@ -167,7 +185,9 @@ class ChatPageState extends State<ChatPage> {
                       height: AppBar().preferredSize.height,
                       padding: EdgeInsets.symmetric(horizontal: 7.5),
                       icon: Icon(Icons.call, color: blackColor, size: 30),
-                      onPressed: _videoCallPressed)
+                      onPressed: () async {
+                        _videoCallPressed();
+                      })
                 ])),
             bottom: PreferredSize(
                 child: Container(color: lightGreyColor, height: 0.5),

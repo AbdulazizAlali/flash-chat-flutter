@@ -19,6 +19,8 @@ class ChatService {
   AuthService _authService = AuthService();
   StreamSubscription _watchChatsSubscription;
 
+  ChatService() {}
+
   Future<void> dispose() {
     return _watchChatsSubscription?.cancel();
   }
@@ -70,7 +72,7 @@ class ChatService {
   }
 
   Stream<List> getMessages(String chatId, [DocumentSnapshot docSnapshot]) {
-    Query messagesQuery = _firestore
+    var messagesQuery = _firestore
         .collection('chats')
         .document(chatId)
         .collection('messages')
@@ -254,7 +256,7 @@ class ChatService {
   }
 
   Stream<List<ChatModel>> _watchChatsByIds(List<String> chatIds) {
-    Query chatsQuery = _firestore
+    var chatsQuery = _firestore
         .collection('chats')
         .where(FieldPath.documentId, whereIn: chatIds);
     return chatsQuery.snapshots().transform(
@@ -337,7 +339,7 @@ class ChatService {
   }
 
   Future<List<DocumentSnapshot>> _getUsersDocsByQuery(String query) async {
-    Query usersQuery = _firestore.collection('users');
+    var usersQuery = _firestore.collection('users');
     if (query.isNotEmpty) {
       query = query.toLowerCase();
       usersQuery = usersQuery.where('searchTerms', arrayContains: query);
