@@ -87,7 +87,7 @@ class ChatPageState extends State<ChatPage> {
 
     _chatBloc.members.forEach((key, value) {
       print(value);
-      if (value["username"] != "me") {
+      if (value["username"] != me) {
         user = value["username"];
       }
     });

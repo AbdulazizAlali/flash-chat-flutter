@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_chat/src/pages/chats/chats.dart';
@@ -5,6 +6,8 @@ import 'package:flutter_firebase_chat/src/pages/new_offer/offers_page.dart';
 import 'package:flutter_firebase_chat/src/pages/offers/offers_bloc.dart';
 import 'package:flutter_firebase_chat/src/pages/offers/offers_page.dart';
 import 'package:flutter_firebase_chat/src/pages/profile/profile.dart';
+import 'package:flutter_firebase_chat/src/pages/video_call/video_call.dart';
+import 'package:flutter_firebase_chat/src/services/auth_service.dart';
 import 'package:flutter_firebase_chat/src/themes/colors.dart';
 
 class TabsPage extends StatefulWidget {
@@ -13,8 +16,31 @@ class TabsPage extends StatefulWidget {
 }
 
 class TabsPageState extends State<TabsPage> {
+  final _authService = AuthService();
+  final _firebaseDatabase = FirebaseDatabase.instance.reference();
+
+  listen(BuildContext context) async {
+    String me = await _authService.getProfile().then((value) => value.username);
+    bool first = true;
+    _firebaseDatabase.child(me).child("calls").onValue.listen((event) {
+      if (first) {
+        first = false;
+      } else {
+        String channelId = event.snapshot.value["user"].toString();
+        print(channelId + "&&7&&&&&&&&&&&&&&");
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => BlocProvider<VideoCallBloc>(
+                    create: (_) => VideoCallBloc(chatId: channelId),
+                    child: VideoCallPage())));
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    listen(context);
     return DefaultTabController(
         length: 4,
         child: Center(

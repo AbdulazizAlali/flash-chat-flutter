@@ -2,6 +2,7 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_chat/src/pages/video_call/video_call_bloc.dart';
+import 'package:flutter_firebase_chat/src/services/auth_service.dart';
 import 'package:flutter_firebase_chat/src/themes/colors.dart';
 import 'package:flutter_firebase_chat/src/utils/settings.dart';
 import 'package:flutter_firebase_chat/src/widgets/raw_icon_button.dart';
@@ -48,14 +49,21 @@ class VideoCallPageState extends State<VideoCallPage> {
     //   return AgoraRenderWidget(userId);
     // else
     return Center(
-      child: CircleAvatar(
-        maxRadius: 150,
-        backgroundColor: Colors.blueGrey,
-        foregroundColor: Colors.blueGrey,
-        child: Icon(
-          Icons.call,
-          color: Colors.white,
-          size: 100,
+      child: FlatButton(
+        onPressed: () async {
+          AuthService _auth = AuthService();
+          String me = await _auth.getProfile().then((value) => value.username);
+          print(me + "5555555555555555555555555555");
+        },
+        child: CircleAvatar(
+          maxRadius: 150,
+          backgroundColor: Colors.blueGrey,
+          foregroundColor: Colors.blueGrey,
+          child: Icon(
+            Icons.call,
+            color: Colors.white,
+            size: 100,
+          ),
         ),
       ),
     );
