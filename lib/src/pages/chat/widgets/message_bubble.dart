@@ -78,7 +78,7 @@ class MessageBubbleState extends State<MessageBubble> {
 
     bool isCurrent = (widget.userId == null);
 
-    double bubbleMaxWidth = (MediaQuery.of(context).size.width - 60) * 0.8;
+    double bubbleMaxWidth = (MediaQuery.of(context).size.width * 0.85);
     if (widget.withLeftOffset) bubbleMaxWidth = bubbleMaxWidth - 50;
     return Column(children: [
       (widget.newDay != null)
@@ -125,117 +125,134 @@ class MessageBubbleState extends State<MessageBubble> {
                     margin: EdgeInsets.only(bottom: 8),
                     child: Bubble(
                       style: isCurrent ? styleMe : styleSomebody,
-                      child: (widget.contentType == 'image')
-                          ? GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => ImageViewPage(
-                                            url: widget.content)));
-                              },
-                              child: ClipRRect(
-                                  child: Image.network(
-                                widget.content,
-                                fit: BoxFit.fitHeight,
-                                height: bubbleMaxWidth - 50,
-                              )))
-                          : (widget.contentType == 'file')
-                              ? Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    FlatButton(
-                                      child: Row(
+                      child: Padding(
+                        padding: const EdgeInsets.all(0.5),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            (widget.contentType == 'image')
+                                ? GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (_) => ImageViewPage(
+                                                  url: widget.content)));
+                                    },
+                                    child: ClipRRect(
+                                        child: Image.network(
+                                      widget.content,
+                                      fit: BoxFit.fitHeight,
+                                      height: bubbleMaxWidth - 50,
+                                    )))
+                                : (widget.contentType == 'file')
+                                    ? Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Expanded(
-                                            flex: 3,
-                                            child: Text(
-                                              widget.content.substring(
-                                                  widget.content
-                                                          .lastIndexOf("%2F") +
-                                                      3,
-                                                  widget.content.indexOf("?")),
-                                              softWrap: true,
+                                          FlatButton(
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Expanded(
+                                                  flex: 3,
+                                                  child: Text(
+                                                    widget.content.substring(
+                                                        widget.content
+                                                                .lastIndexOf(
+                                                                    "%2F") +
+                                                            3,
+                                                        widget.content
+                                                            .indexOf("?")),
+                                                    softWrap: true,
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: SvgPicture.asset(
+                                                    widget.content
+                                                            .contains(".doc")
+                                                        ? "assets/word.svg"
+                                                        : widget.content
+                                                                .contains(
+                                                                    ".ppt")
+                                                            ? "assets/powerpoint.svg"
+                                                            : widget.content
+                                                                    .contains(
+                                                                        ".xlsx")
+                                                                ? "assets/excel.svg"
+                                                                : widget.content
+                                                                        .contains(
+                                                                            ".pdf")
+                                                                    ? "assets/pdf.svg"
+                                                                    : "assets/file.svg",
+                                                    height: 30,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            onPressed: () async {
+                                              openFile(widget.content);
+                                            },
+                                          ),
+                                        ],
+                                      )
+                                    : Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            widget.content,
+                                            softWrap: true,
+                                            textAlign: TextAlign.right,
+                                            style: TextStyle(
+                                              height: 1.1,
+                                              fontSize: 16,
                                             ),
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: SvgPicture.asset(
-                                              widget.content.contains(".doc")
-                                                  ? "assets/word.svg"
-                                                  : widget.content
-                                                          .contains(".ppt")
-                                                      ? "assets/powerpoint.svg"
-                                                      : widget.content
-                                                              .contains(".xlsx")
-                                                          ? "assets/excel.svg"
-                                                          : widget.content
-                                                                  .contains(
-                                                                      ".pdf")
-                                                              ? "assets/pdf.svg"
-                                                              : "assets/file.svg",
-                                              height: 30,
-                                            ),
+                                          SizedBox(
+                                            height: 3,
                                           ),
                                         ],
                                       ),
-                                      onPressed: () async {
-                                        openFile(widget.content);
-                                      },
-                                    ),
-                                    Text(
-                                      widget.date,
-                                      textAlign: TextAlign.right,
-                                    ),
-                                  ],
-                                )
-                              : Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      widget.content,
-                                      softWrap: true,
-                                      textAlign: TextAlign.right,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 3,
-                                    ),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          widget.date,
-                                          textAlign: TextAlign.right,
-                                          style: TextStyle(
-                                            fontSize: 11,
-                                            color: Colors.black38,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 5,
-                                        ),
-                                        widget.contentType.contains("loading")
-                                            ? Icon(
-                                                Icons.timer_sharp,
-                                                color: Colors.black38,
-                                                size: 15,
-                                              )
-                                            : Icon(
-                                                Icons.done,
-                                                color: Colors.black38,
-                                                size: 15,
-                                              )
-                                      ],
-                                    ),
-                                  ],
+                            SizedBox(
+                              height: 3,
+                            ),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  widget.date,
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: Colors.black38,
+                                  ),
                                 ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                widget.contentType.contains("loading")
+                                    ? Icon(
+                                        Icons.timer_sharp,
+                                        color: Colors.black38,
+                                        size: 15,
+                                      )
+                                    : Icon(
+                                        Icons.done,
+                                        color: Colors.black38,
+                                        size: 15,
+                                      )
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ])

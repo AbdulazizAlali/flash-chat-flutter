@@ -35,7 +35,10 @@ class ChatPageState extends State<ChatPage> {
   }
 
   void _sendTextPressed() {
+    _chatBloc.add(ChatScrollToBottomEvent(isScrollToBottom: true));
+
     _chatBloc.add(ChatSendTextEvent());
+
     _messageController.text = '';
   }
 
@@ -200,7 +203,6 @@ class ChatPageState extends State<ChatPage> {
             alignment: Alignment.bottomCenter,
             child: RefreshIndicator(
                 child: ListView.builder(
-
                     controller: _chatScrollController,
                     itemCount: messages.length,
                     itemBuilder: (_, index) {
@@ -242,14 +244,14 @@ class ChatPageState extends State<ChatPage> {
   Widget _buildChatBottomBar(bool isMessageValid) {
     return SafeArea(
       child: Container(
-        margin: EdgeInsets.fromLTRB(15, 0, 30, 5),
-        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+        child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
           RawIconButton(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               icon: Icon(Icons.add_a_photo, color: blackColor, size: 25),
               onPressed: _sendImagePressed),
           RawIconButton(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               icon: Icon(Icons.file_upload, color: blackColor, size: 25),
               onPressed: _sendFilePressed),
           Expanded(
@@ -279,11 +281,11 @@ class ChatPageState extends State<ChatPage> {
           Container(
               margin: EdgeInsets.all(5),
               child: RawIconButton(
-                  height: 30,
-                  width: 30,
+                  height: 40,
+                  width: 40,
                   fillColor: isMessageValid ? blueColor : lightGreyColor,
                   shape: CircleBorder(),
-                  icon: Icon(Icons.send, size: 16, color: whiteColor),
+                  icon: Icon(Icons.send, size: 25, color: whiteColor),
                   onPressed: isMessageValid ? _sendTextPressed : null))
         ]),
       ),

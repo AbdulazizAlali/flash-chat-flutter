@@ -132,7 +132,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         contentType: "loading",
         date: Timestamp.now(),
         userId: null));
-    add(ChatScrollToBottomEvent(isScrollToBottom: false));
+
+    yield state.update(messages: messages);
+
+    add(ChatTextFieldChangedEvent(message: ''));
 
     // state.update(messages: messages);
 
