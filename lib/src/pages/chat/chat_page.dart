@@ -169,7 +169,7 @@ class ChatPageState extends State<ChatPage> {
                 child: Row(children: [
                   RawIconButton(
                       height: AppBar().preferredSize.height,
-                      padding: EdgeInsets.symmetric(horizontal: 30),
+                      padding: EdgeInsets.symmetric(horizontal: 15),
                       icon: Icon(Icons.arrow_back, color: blackColor, size: 25),
                       onPressed: () => Navigator.pop(context)),
                   Expanded(
@@ -197,12 +197,10 @@ class ChatPageState extends State<ChatPage> {
   Widget _buildChatContent(List<MessageModel> messages, Map members) {
     return Expanded(
         child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 30),
             alignment: Alignment.bottomCenter,
             child: RefreshIndicator(
                 child: ListView.builder(
-                    padding: EdgeInsets.only(bottom: 20),
-                    shrinkWrap: true,
+
                     controller: _chatScrollController,
                     itemCount: messages.length,
                     itemBuilder: (_, index) {
@@ -243,56 +241,53 @@ class ChatPageState extends State<ChatPage> {
 
   Widget _buildChatBottomBar(bool isMessageValid) {
     return SafeArea(
-        child: Container(
-            margin: EdgeInsets.fromLTRB(15, 0, 30, 5),
-            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              RawIconButton(
-                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                  icon: Icon(Icons.add_a_photo, color: blackColor, size: 25),
-                  onPressed: _sendImagePressed),
-              RawIconButton(
-                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                  icon: Icon(Icons.file_upload, color: blackColor, size: 25),
-                  onPressed: _sendFilePressed),
-              Expanded(
-                  child: Container(
-                      padding: EdgeInsets.only(left: 15, right: 5),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(color: lightGreyColor)),
-                      child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                                child: TextField(
-                                    style: TextStyle(
-                                        fontSize: 16, color: blackColor),
-                                    decoration: InputDecoration(
-                                        hintText: 'Enter message...',
-                                        border: InputBorder.none,
-                                        isDense: true,
-                                        contentPadding:
-                                            EdgeInsets.symmetric(vertical: 8)),
-                                    maxLines: null,
-                                    controller: _messageController,
-                                    onChanged: (_) => _onTextFieldChanged(),
-                                    focusNode: _messageFocusNode)),
-                            Container(
-                                margin: EdgeInsets.only(top: 5),
-                                child: RawIconButton(
-                                    height: 25,
-                                    width: 25,
-                                    fillColor: isMessageValid
-                                        ? blueColor
-                                        : lightGreyColor,
-                                    shape: CircleBorder(),
-                                    icon: Icon(Icons.arrow_upward,
-                                        size: 18, color: whiteColor),
-                                    onPressed: isMessageValid
-                                        ? _sendTextPressed
-                                        : null))
-                          ])))
-            ])));
+      child: Container(
+        margin: EdgeInsets.fromLTRB(15, 0, 30, 5),
+        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          RawIconButton(
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+              icon: Icon(Icons.add_a_photo, color: blackColor, size: 25),
+              onPressed: _sendImagePressed),
+          RawIconButton(
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+              icon: Icon(Icons.file_upload, color: blackColor, size: 25),
+              onPressed: _sendFilePressed),
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.only(left: 15, right: 5),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(color: lightGreyColor)),
+              child:
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Expanded(
+                    child: TextField(
+                        style: TextStyle(fontSize: 16, color: blackColor),
+                        decoration: InputDecoration(
+                            hintText: 'Enter message...',
+                            border: InputBorder.none,
+                            isDense: true,
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 1)),
+                        maxLines: null,
+                        controller: _messageController,
+                        onChanged: (_) => _onTextFieldChanged(),
+                        focusNode: _messageFocusNode)),
+              ]),
+            ),
+          ),
+          Container(
+              margin: EdgeInsets.all(5),
+              child: RawIconButton(
+                  height: 30,
+                  width: 30,
+                  fillColor: isMessageValid ? blueColor : lightGreyColor,
+                  shape: CircleBorder(),
+                  icon: Icon(Icons.send, size: 16, color: whiteColor),
+                  onPressed: isMessageValid ? _sendTextPressed : null))
+        ]),
+      ),
+    );
   }
 }
 

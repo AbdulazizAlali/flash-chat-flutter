@@ -1,5 +1,6 @@
 import 'dart:io' as io;
 
+import 'package:bubble/bubble.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -56,20 +57,27 @@ class MessageBubbleState extends State<MessageBubble> {
   Widget build(BuildContext context) {
     // TODO: implement build
 
+    double pixelRatio = MediaQuery.of(context).devicePixelRatio;
+    double px = 1 / pixelRatio;
+    BubbleStyle styleSomebody = BubbleStyle(
+      nip: BubbleNip.leftTop,
+      color: Colors.blueGrey.shade100,
+      padding: BubbleEdges.symmetric(horizontal: 10),
+      elevation: 1 * px,
+      margin: BubbleEdges.only(right: 10.0),
+      alignment: Alignment.topLeft,
+    );
+    BubbleStyle styleMe = BubbleStyle(
+      nip: BubbleNip.rightTop,
+      padding: BubbleEdges.symmetric(horizontal: 10),
+      color: Color.fromARGB(255, 225, 255, 199),
+      elevation: 1 * px,
+      margin: BubbleEdges.only(left: 10.0),
+      alignment: Alignment.topRight,
+    );
+
     bool isCurrent = (widget.userId == null);
-    BorderRadius bubbleBorderRadius = BorderRadius.only(
-        topLeft: widget.withoutTopBorders
-            ? (isCurrent ? Radius.circular(10) : Radius.zero)
-            : Radius.circular(10),
-        topRight: widget.withoutTopBorders
-            ? (isCurrent ? Radius.zero : Radius.circular(10))
-            : Radius.circular(10),
-        bottomLeft: widget.withoutBottomBorders
-            ? (isCurrent ? Radius.circular(10) : Radius.zero)
-            : Radius.circular(10),
-        bottomRight: widget.withoutBottomBorders
-            ? (isCurrent ? Radius.zero : Radius.circular(10))
-            : Radius.circular(10));
+
     double bubbleMaxWidth = (MediaQuery.of(context).size.width - 60) * 0.8;
     if (widget.withLeftOffset) bubbleMaxWidth = bubbleMaxWidth - 50;
     return Column(children: [
@@ -111,58 +119,50 @@ class MessageBubbleState extends State<MessageBubble> {
                       : Container(),
                   Container(
                     constraints: BoxConstraints(maxWidth: bubbleMaxWidth),
-                    decoration: BoxDecoration(
-                        color: (widget.contentType == 'image')
-                            ? Colors.transparent
-                            : (isCurrent ? blueColor : lightGreyColor),
-                        borderRadius: bubbleBorderRadius),
                     padding: (widget.contentType == 'image')
                         ? EdgeInsets.zero
                         : EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                     margin: EdgeInsets.only(bottom: 8),
-                    child: (widget.contentType == 'image')
-                        ? GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) =>
-                                          ImageViewPage(url: widget.content)));
-                            },
-                            child: ClipRRect(
-                                borderRadius: bubbleBorderRadius,
-                                child: Image.network(
-                                  widget.content,
-                                  fit: BoxFit.fitHeight,
-                                  height: bubbleMaxWidth - 50,
-                                )))
-                        : (widget.contentType == 'file')
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  FlatButton(
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          flex: 3,
-                                          child: Text(
-                                            widget.content.substring(
-                                                widget.content
-                                                        .lastIndexOf("%2F") +
-                                                    3,
-                                                widget.content.indexOf("?")),
-                                            softWrap: true,
-                                            style:
-                                                TextStyle(color: Colors.white),
+                    child: Bubble(
+                      style: isCurrent ? styleMe : styleSomebody,
+                      child: (widget.contentType == 'image')
+                          ? GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => ImageViewPage(
+                                            url: widget.content)));
+                              },
+                              child: ClipRRect(
+                                  child: Image.network(
+                                widget.content,
+                                fit: BoxFit.fitHeight,
+                                height: bubbleMaxWidth - 50,
+                              )))
+                          : (widget.contentType == 'file')
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    FlatButton(
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            flex: 3,
+                                            child: Text(
+                                              widget.content.substring(
+                                                  widget.content
+                                                          .lastIndexOf("%2F") +
+                                                      3,
+                                                  widget.content.indexOf("?")),
+                                              softWrap: true,
+                                            ),
                                           ),
-                                        ),
-                                        CircleAvatar(
-                                          backgroundColor: Color(0xEEFFFFFF),
-                                          child: Padding(
+                                          Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: SvgPicture.asset(
                                               widget.content.contains(".doc")
@@ -181,47 +181,62 @@ class MessageBubbleState extends State<MessageBubble> {
                                               height: 30,
                                             ),
                                           ),
+                                        ],
+                                      ),
+                                      onPressed: () async {
+                                        openFile(widget.content);
+                                      },
+                                    ),
+                                    Text(
+                                      widget.date,
+                                      textAlign: TextAlign.right,
+                                    ),
+                                  ],
+                                )
+                              : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      widget.content,
+                                      softWrap: true,
+                                      textAlign: TextAlign.right,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          widget.date,
+                                          textAlign: TextAlign.right,
+                                          style: TextStyle(
+                                            fontSize: 11,
+                                            color: Colors.black38,
+                                          ),
                                         ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        widget.contentType.contains("loading")
+                                            ? Icon(
+                                                Icons.timer_sharp,
+                                                color: Colors.black38,
+                                                size: 15,
+                                              )
+                                            : Icon(
+                                                Icons.done,
+                                                color: Colors.black38,
+                                                size: 15,
+                                              )
                                       ],
                                     ),
-                                    onPressed: () async {
-                                      openFile(widget.content);
-                                    },
-                                  ),
-                                  Text(
-                                    widget.date,
-                                    textAlign: TextAlign.right,
-                                    style: TextStyle(
-                                        fontSize: 11,
-                                        color: isCurrent
-                                            ? Colors.white38
-                                            : Colors.black38),
-                                  ),
-                                ],
-                              )
-                            : Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    widget.content,
-                                    softWrap: true,
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: isCurrent
-                                            ? whiteColor
-                                            : blackColor),
-                                  ),
-                                  Text(
-                                    widget.date,
-                                    textAlign: TextAlign.right,
-                                    style: TextStyle(
-                                        fontSize: 11,
-                                        color: isCurrent
-                                            ? Colors.white38
-                                            : Colors.black38),
-                                  ),
-                                ],
-                              ),
+                                  ],
+                                ),
+                    ),
                   ),
                 ])
           ])

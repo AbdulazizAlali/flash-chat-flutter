@@ -44,6 +44,13 @@
             </list>
           </value>
         </entry>
+        <entry key="bubble">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../../../../../src/flutter/.pub-cache/hosted/pub.dartlang.org/bubble-1.1.9+1/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="characters">
           <value>
             <list>
@@ -669,6 +676,7 @@
       <root url="file://$PROJECT_DIR$/../../../../../../src/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.5.0-nullsafety.3/lib" />
       <root url="file://$PROJECT_DIR$/../../../../../../src/flutter/.pub-cache/hosted/pub.dartlang.org/bloc-4.0.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../../../../src/flutter/.pub-cache/hosted/pub.dartlang.org/boolean_selector-2.1.0-nullsafety.3/lib" />
+      <root url="file://$PROJECT_DIR$/../../../../../../src/flutter/.pub-cache/hosted/pub.dartlang.org/bubble-1.1.9+1/lib" />
       <root url="file://$PROJECT_DIR$/../../../../../../src/flutter/.pub-cache/hosted/pub.dartlang.org/characters-1.1.0-nullsafety.5/lib" />
       <root url="file://$PROJECT_DIR$/../../../../../../src/flutter/.pub-cache/hosted/pub.dartlang.org/charcode-1.2.0-nullsafety.3/lib" />
       <root url="file://$PROJECT_DIR$/../../../../../../src/flutter/.pub-cache/hosted/pub.dartlang.org/clock-1.1.0-nullsafety.3/lib" />

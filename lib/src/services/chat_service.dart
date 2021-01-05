@@ -77,7 +77,7 @@ class ChatService {
         .document(chatId)
         .collection('messages')
         .orderBy('date', descending: true)
-        .limit(10);
+        .limit(100);
     if (docSnapshot != null)
       messagesQuery = messagesQuery.startAfterDocument(docSnapshot);
     return messagesQuery.snapshots().transform(
@@ -102,7 +102,7 @@ class ChatService {
 
   Future<DocumentReference> sendTextMessage(
       String chatId, String message) async {
-    return _firestore
+    return await _firestore
         .collection('chats')
         .document(chatId)
         .collection('messages')

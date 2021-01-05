@@ -125,7 +125,17 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   Stream<ChatState> _mapSendTextToState() async* {
-    yield state.update(isLoading: true);
+    yield state.update();
+    List<MessageModel> messages = state.messages;
+    messages.add(MessageModel(
+        content: _message,
+        contentType: "loading",
+        date: Timestamp.now(),
+        userId: null));
+    add(ChatScrollToBottomEvent(isScrollToBottom: false));
+
+    // state.update(messages: messages);
+
     try {
       if (chatId == null) await _createAndInitChat();
       await _chatService.sendTextMessage(chatId, _message);
